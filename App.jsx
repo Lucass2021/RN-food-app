@@ -1,16 +1,19 @@
 import { SafeAreaView, StyleSheet, Text, StatusBar } from 'react-native';
+import HomeScreen from './Components/HomeScreen';
 
 export default function App() {
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar />
-      <Text>Open up App.js to start working on your app!</Text>
+
+      <HomeScreen />
+
     </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-
+    paddingHorizontal: 30
   },
 });
