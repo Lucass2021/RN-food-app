@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { SectionList, Image, StyleSheet, Text, View } from 'react-native';
+import { SectionList, Image, StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 
 export default HomeScreen = () => {
     const [categories, setCategories] = useState([]);
@@ -19,18 +19,24 @@ export default HomeScreen = () => {
         fetchCategories();
     }, []);
 
-    const renderItem = ({ item }) => (
-        <View style={styles.categoryContainer}>
-            <Image source={{ uri: item.strCategoryThumb }} style={styles.image} />
-            <Text style={styles.categoryText}>{item.strCategory}</Text>
-        </View>
-    );
-
+    // Section List Header
     const renderSectionHeader = () => (
         <View style={styles.titleContainer}>
             <Text style={styles.titleText}>What type of food do you want to eat?</Text>
         </View>
     );
+
+    // Section List Body
+    const renderItem = ({ item }) => (
+        <TouchableOpacity style={styles.categoryContainer} activeOpacity={0.7} onPress={() => handleMealsScreen(item.strCategory)}>
+            <Image source={{ uri: item.strCategoryThumb }} style={styles.image} />
+            <Text style={styles.categoryText}>{item.strCategory}</Text>
+        </TouchableOpacity>
+    );
+
+    const handleMealsScreen = (category) => {
+        alert(`Selected category: ${category}`);
+    }
 
     return (
         <View>
@@ -51,7 +57,7 @@ export default HomeScreen = () => {
 
 const styles = StyleSheet.create({
     categoryContainer: {
-        marginBottom: 20,
+        marginBottom: 50,
     },
     categoryText: {
         textAlign: 'center',
@@ -64,7 +70,8 @@ const styles = StyleSheet.create({
         marginBottom: 15
     },
     titleContainer: {
-        marginVertical: 20
+        marginVertical: 20,
+        marginBottom: 50
     },
     titleText: {
         fontSize: 26,
