@@ -1,17 +1,15 @@
-import { SafeAreaView, StyleSheet, Text, StatusBar } from 'react-native';
-import HomeScreen from './Components/HomeScreen';
-import { NavigationContainer } from '@react-navigation/native';
+import { SafeAreaView, StyleSheet, Text, StatusBar } from 'react-native';;
+import HomeScreen from './screens/HomeScreen';
 
 export default function App() {
   return (
-    <NavigationContainer>
-      <SafeAreaView style={styles.container}>
-        <StatusBar />
+    <SafeAreaView style={styles.container}>
+      <StatusBar />
 
-        <HomeScreen />
+      <HomeScreen />
 
-      </SafeAreaView>
-    </NavigationContainer>
+
+    </SafeAreaView>
   );
 }
 
