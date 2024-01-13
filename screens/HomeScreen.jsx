@@ -1,7 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import axios from 'axios';
-import { SectionList, Image, StyleSheet, Text, View, TouchableOpacity, StatusBar } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { SafeAreaView, SectionList, Image, StyleSheet, Text, View, TouchableOpacity, StatusBar } from 'react-native';
 
 export default HomeScreen = ({ navigation }) => {
     const [categories, setCategories] = useState([]);

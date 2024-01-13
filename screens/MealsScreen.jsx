@@ -1,13 +1,14 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
-import { Image, SafeAreaView, SectionList, StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { SafeAreaView, SectionList, Image, StyleSheet, Text, View, TouchableOpacity, StatusBar } from 'react-native';
 
-export default function MealsScreen({ route }) {
+export default function MealsScreen({ navigation, route }) {
     const [meals, setMeals] = useState([]);
-
     const category = route.params.category
 
-
+    const handleMealDetailsScreen = (idMeal) => {
+        navigation.navigate('About the Meal', { idMeal });
+    }
 
     useEffect(() => {
         console.log("category", category)
@@ -33,7 +34,7 @@ export default function MealsScreen({ route }) {
 
     // Section List Body
     const renderItem = ({ item }) => (
-        <TouchableOpacity style={styles.categoryContainer} activeOpacity={0.7} onPress={() => alert("oi")}>
+        <TouchableOpacity style={styles.categoryContainer} activeOpacity={0.7} onPress={() => handleMealDetailsScreen()}>
             <Image source={{ uri: item.strMealThumb }} style={styles.image} />
             <Text style={styles.categoryText}>{item.strMeal}</Text>
         </TouchableOpacity>
