@@ -1,10 +1,10 @@
 import { StyleSheet, Text, View } from 'react-native';
 
-export default function MealsScreen() {
+export default function MealsScreen({ category }) {
     return (
         <View style={styles.container}>
 
-            <Text>Meal component</Text>
+            <Text>Meals component {category}</Text>
 
         </View>
     );

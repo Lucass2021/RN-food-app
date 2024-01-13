@@ -1,9 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { SectionList, Image, StyleSheet, Text, View, TouchableOpacity } from 'react-native';
+import { SectionList, Image, StyleSheet, Text, View, TouchableOpacity, StatusBar } from 'react-native';
+import MealsScreen from './MealsScreen';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
-export default HomeScreen = () => {
+export default HomeScreen = ({ navigation }) => {
     const [categories, setCategories] = useState([]);
+
+    const handleMealsScreen = (category) => {
+        navigation.navigate('MealsScreen', category);
+    }
 
     useEffect(() => {
         const fetchCategories = async () => {
@@ -34,12 +40,10 @@ export default HomeScreen = () => {
         </TouchableOpacity>
     );
 
-    const handleMealsScreen = (category) => {
-        alert(`Selected category: ${category}`);
-    }
-
     return (
-        <View>
+        <SafeAreaView style={styles.container}>
+            <StatusBar />
+
             <SectionList
                 sections={[
                     {
@@ -51,11 +55,15 @@ export default HomeScreen = () => {
                 renderSectionHeader={renderSectionHeader}
                 keyExtractor={(item) => item.idCategory}
             />
-        </View>
+
+        </SafeAreaView>
     );
 };
 
 const styles = StyleSheet.create({
+    container: {
+        paddingHorizontal: 30
+    },
     categoryContainer: {
         marginBottom: 50,
     },

@@ -1,20 +1,11 @@
-import { SafeAreaView, StyleSheet, Text, StatusBar } from 'react-native';;
-import HomeScreen from './screens/HomeScreen';
+import { NavigationContainer } from '@react-navigation/native';
+import Stack from './Stack';
 
 export default function App() {
   return (
-    <SafeAreaView style={styles.container}>
-      <StatusBar />
-
-      <HomeScreen />
-
-
-    </SafeAreaView>
+    <NavigationContainer>
+      <Stack />
+    </NavigationContainer>
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    paddingHorizontal: 30
-  },
-});
