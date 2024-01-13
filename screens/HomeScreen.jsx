@@ -1,14 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { SectionList, Image, StyleSheet, Text, View, TouchableOpacity, StatusBar } from 'react-native';
-import MealsScreen from './MealsScreen';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default HomeScreen = ({ navigation }) => {
     const [categories, setCategories] = useState([]);
 
     const handleMealsScreen = (category) => {
-        navigation.navigate('Meals', category);
+        navigation.navigate('Meals', { category });
     }
 
     useEffect(() => {
