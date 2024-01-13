@@ -8,7 +8,7 @@ export default HomeScreen = ({ navigation }) => {
     const [categories, setCategories] = useState([]);
 
     const handleMealsScreen = (category) => {
-        navigation.navigate('MealsScreen', category);
+        navigation.navigate('Meals', category);
     }
 
     useEffect(() => {
