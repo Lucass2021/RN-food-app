@@ -11,7 +11,6 @@ export default function MealsScreen({ navigation, route }) {
     }
 
     useEffect(() => {
-        console.log("category", category)
         const fetchMeals = async () => {
             try {
                 const response = await axios.get(`https://www.themealdb.com/api/json/v1/1/filter.php?c=${category}`);
@@ -34,7 +33,7 @@ export default function MealsScreen({ navigation, route }) {
 
     // Section List Body
     const renderItem = ({ item }) => (
-        <TouchableOpacity style={styles.categoryContainer} activeOpacity={0.7} onPress={() => handleMealDetailsScreen()}>
+        <TouchableOpacity style={styles.categoryContainer} activeOpacity={0.7} onPress={() => handleMealDetailsScreen(item.idMeal)}>
             <Image source={{ uri: item.strMealThumb }} style={styles.image} />
             <Text style={styles.categoryText}>{item.strMeal}</Text>
         </TouchableOpacity>
