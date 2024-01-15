@@ -10,6 +10,10 @@ export default function MealsScreen({ navigation, route }) {
         navigation.navigate('About the Meal', { idMeal });
     }
 
+    const handleRandomMeal = () => {
+        navigation.navigate('Random Meal')
+    }
+
     useEffect(() => {
         const fetchMeals = async () => {
             try {
@@ -39,6 +43,13 @@ export default function MealsScreen({ navigation, route }) {
         </TouchableOpacity>
     );
 
+    // Section List Footer
+    const renderSectionFooter = () => (
+        <TouchableOpacity style={styles.titleContainer} activeOpacity={0.7} onPress={() => handleRandomMeal()}>
+            <Text style={{ ...styles.titleText, fontSize: 16 }}>Don't know what to cook? Click here for a random recipe</Text>
+        </TouchableOpacity>
+    );
+
     return (
         <SafeAreaView style={styles.container}>
             <StatusBar />
@@ -52,6 +63,7 @@ export default function MealsScreen({ navigation, route }) {
                 ]}
                 renderItem={renderItem}
                 renderSectionHeader={renderSectionHeader}
+                renderSectionFooter={renderSectionFooter}
                 keyExtractor={(item) => item.idMeal}
             />
 

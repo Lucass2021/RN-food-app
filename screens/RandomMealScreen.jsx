@@ -2,24 +2,23 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { SafeAreaView, SectionList, Image, StyleSheet, Text, View, TouchableOpacity, StatusBar, Linking } from 'react-native';
 
-export default function MealDetailsScreen({ route }) {
-    const [mealDetails, setMealDetails] = useState([])
+export default function RandomMealScreen() {
+    const [randomMeal, setRandomMeal] = useState([])
 
-    const idMeal = route.params.idMeal
 
     useEffect(() => {
-        const fetchIdMeals = async () => {
+        const fetchRandomMeal = async () => {
             try {
-                const response = await axios.get(`https://www.themealdb.com/api/json/v1/1/lookup.php?i=${idMeal}`);
-                const idMealsData = response.data.meals;
-                setMealDetails(idMealsData);
+                const response = await axios.get(`https://www.themealdb.com/api/json/v1/1/random.php`);
+                const randomMealData = response.data.meals;
+                setRandomMeal(randomMealData);
             } catch (error) {
                 console.log("API error", error)
             }
         };
 
-        fetchIdMeals();
-    }, [idMeal]);
+        fetchRandomMeal();
+    }, []);
 
     // Section List Header
     const renderSectionHeader = () => (
@@ -52,7 +51,7 @@ export default function MealDetailsScreen({ route }) {
                 sections={[
                     {
                         title: 'Header',
-                        data: mealDetails,
+                        data: randomMeal,
                     },
                 ]}
                 renderItem={renderItem}
@@ -104,3 +103,4 @@ const styles = StyleSheet.create({
         borderRadius: 5,
     }
 });
+
