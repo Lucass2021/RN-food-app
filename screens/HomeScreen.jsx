@@ -1,9 +1,10 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
-import { SafeAreaView, SectionList, Image, StyleSheet, Text, View, TouchableOpacity, StatusBar } from 'react-native';
+import { SafeAreaView, SectionList, Image, StyleSheet, Text, View, TouchableOpacity, StatusBar, TextInput } from 'react-native';
 
 export default HomeScreen = ({ navigation }) => {
     const [categories, setCategories] = useState([]);
+    const [textInput, setTextInput] = useState("");
 
     const handleMealsScreen = (category) => {
         navigation.navigate('Meals', { category });
@@ -11,6 +12,14 @@ export default HomeScreen = ({ navigation }) => {
 
     const handleRandomMeal = () => {
         navigation.navigate('Random Meal')
+    }
+
+    const handleChangeText = (text) => {
+        setTextInput(text)
+    }
+
+    const handleInputSearch = () => {
+        navigation.navigate('Results', { textInput })
     }
 
     useEffect(() => {
@@ -30,7 +39,14 @@ export default HomeScreen = ({ navigation }) => {
     // Section List Header
     const renderSectionHeader = () => (
         <View style={styles.titleContainer}>
-            <Text style={styles.titleText}>What type of food do you want to eat?</Text>
+            <Text style={styles.titleText}>Let's plan your next meal</Text>
+            <TextInput
+                style={styles.input}
+                value={textInput}
+                onChangeText={(text) => handleChangeText(text)}
+                onSubmitEditing={() => handleInputSearch(textInput)}
+                placeholder="Tell us what you're hungry for..."
+            />
         </View>
     );
 
@@ -73,6 +89,12 @@ export default HomeScreen = ({ navigation }) => {
 const styles = StyleSheet.create({
     container: {
         paddingHorizontal: 30
+    },
+    input: {
+        height: 40,
+        margin: 12,
+        borderWidth: 1,
+        padding: 10,
     },
     categoryContainer: {
         marginBottom: 50,
