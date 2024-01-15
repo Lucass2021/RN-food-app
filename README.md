@@ -9,7 +9,7 @@
 
 ## 📝 Description
 
-> This is a simple project with the objective to practice API request with user manipulation and React Navigation Library in React Native.
+> This is a project with the objective to practice API request with user manipulation and React Navigation Library in React Native.
 ---
 
 ## 🚀 Technologies
