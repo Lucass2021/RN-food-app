@@ -4,6 +4,7 @@ import { SafeAreaView, SectionList, Image, StyleSheet, Text, View, TouchableOpac
 
 export default SearchScreen = ({ navigation, route }) => {
     const [searchMeals, setSearchMeals] = useState([]);
+    const [emptyMeals, setEmptyMeals] = useState(false);
     const searchInputResult = route.params.textInput
 
     const handleMealDetailsScreen = (idMeal) => {
@@ -19,7 +20,13 @@ export default SearchScreen = ({ navigation, route }) => {
             try {
                 const response = await axios.get(`https://www.themealdb.com/api/json/v1/1/search.php?s=${searchInputResult}`);
                 const searchMealsData = response.data.meals;
-                setSearchMeals(searchMealsData);
+
+                if (searchMealsData === null) {
+                    setEmptyMeals(true)
+                } else {
+                    setSearchMeals(searchMealsData);
+                }
+
             } catch (error) {
                 console.log("API error", error)
             }
@@ -54,18 +61,31 @@ export default SearchScreen = ({ navigation, route }) => {
         <SafeAreaView style={styles.container}>
             <StatusBar />
 
-            <SectionList
-                sections={[
-                    {
-                        title: 'Header',
-                        data: searchMeals,
-                    },
-                ]}
-                renderItem={renderItem}
-                renderSectionHeader={renderSectionHeader}
-                renderSectionFooter={renderSectionFooter}
-                keyExtractor={(item) => item.idMeal}
-            />
+            {searchMeals != '' &&
+                <SectionList
+                    sections={[
+                        {
+                            title: 'Header',
+                            data: searchMeals,
+                        },
+                    ]}
+                    renderItem={renderItem}
+                    renderSectionHeader={renderSectionHeader}
+                    renderSectionFooter={renderSectionFooter}
+                    keyExtractor={(item) => item.idMeal}
+                />
+            }
+
+            {emptyMeals &&
+                <TouchableOpacity style={styles.titleContainer} activeOpacity={0.7} onPress={() => handleRandomMeal()}>
+                    <Text style={{ ...styles.titleText, fontSize: 16 }}>
+                        There are no meals with this ingredient.
+                    </Text>
+                    <Text style={{ ...styles.titleText, fontSize: 16 }}>
+                        Click here for a random meal instead.
+                    </Text>
+                </TouchableOpacity>
+            }
 
         </SafeAreaView>
     )
