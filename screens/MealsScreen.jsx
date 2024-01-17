@@ -1,9 +1,10 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
-import { SafeAreaView, SectionList, Image, StyleSheet, Text, View, TouchableOpacity, StatusBar } from 'react-native';
+import { SafeAreaView, SectionList, Image, StyleSheet, Text, View, TouchableOpacity, StatusBar, ActivityIndicator } from 'react-native';
 
 export default function MealsScreen({ navigation, route }) {
     const [meals, setMeals] = useState([]);
+    const [loading, setLoading] = useState(true);
     const category = route.params.category
 
     const handleMealDetailsScreen = (idMeal) => {
@@ -20,6 +21,7 @@ export default function MealsScreen({ navigation, route }) {
                 const response = await axios.get(`https://www.themealdb.com/api/json/v1/1/filter.php?c=${category}`);
                 const mealsData = response.data.meals;
                 setMeals(mealsData);
+                setLoading(false)
             } catch (error) {
                 console.log("API error", error)
             }
@@ -51,23 +53,34 @@ export default function MealsScreen({ navigation, route }) {
     );
 
     return (
-        <SafeAreaView style={styles.container}>
-            <StatusBar />
+        <>
+            {loading &&
+                <SafeAreaView style={styles.loader}>
+                    <ActivityIndicator size="extra-large" />
+                    <Text style={{ ...styles.titleText, fontSize: 16 }}>Loading...</Text>
+                </SafeAreaView>
+            }
 
-            <SectionList
-                sections={[
-                    {
-                        title: 'Header',
-                        data: meals,
-                    },
-                ]}
-                renderItem={renderItem}
-                renderSectionHeader={renderSectionHeader}
-                renderSectionFooter={renderSectionFooter}
-                keyExtractor={(item) => item.idMeal}
-            />
+            {!loading &&
+                <SafeAreaView style={styles.container}>
+                    <StatusBar />
 
-        </SafeAreaView>
+                    <SectionList
+                        sections={[
+                            {
+                                title: 'Header',
+                                data: meals,
+                            },
+                        ]}
+                        renderItem={renderItem}
+                        renderSectionHeader={renderSectionHeader}
+                        renderSectionFooter={renderSectionFooter}
+                        keyExtractor={(item) => item.idMeal}
+                    />
+
+                </SafeAreaView>
+            }
+        </>
 
     );
 }
@@ -98,6 +111,10 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         textAlign: 'center',
     },
+    loader: {
+        justifyContent: 'center',
+        flex: 1
+    }
 });
 
 

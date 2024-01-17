@@ -1,10 +1,11 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
-import { SafeAreaView, SectionList, Image, StyleSheet, Text, View, TouchableOpacity, StatusBar } from 'react-native';
+import { SafeAreaView, SectionList, Image, StyleSheet, Text, View, TouchableOpacity, StatusBar, ActivityIndicator } from 'react-native';
 
 export default SearchScreen = ({ navigation, route }) => {
     const [searchMeals, setSearchMeals] = useState([]);
     const [emptyMeals, setEmptyMeals] = useState(false);
+    const [loading, setLoading] = useState(true);
     const searchInputResult = route.params.textInput
 
     const handleMealDetailsScreen = (idMeal) => {
@@ -23,8 +24,10 @@ export default SearchScreen = ({ navigation, route }) => {
 
                 if (searchMealsData === null) {
                     setEmptyMeals(true)
+                    setLoading(false)
                 } else {
                     setSearchMeals(searchMealsData);
+                    setLoading(false)
                 }
 
             } catch (error) {
@@ -58,36 +61,49 @@ export default SearchScreen = ({ navigation, route }) => {
     );
 
     return (
-        <SafeAreaView style={styles.container}>
-            <StatusBar />
-
-            {searchMeals != '' &&
-                <SectionList
-                    sections={[
-                        {
-                            title: 'Header',
-                            data: searchMeals,
-                        },
-                    ]}
-                    renderItem={renderItem}
-                    renderSectionHeader={renderSectionHeader}
-                    renderSectionFooter={renderSectionFooter}
-                    keyExtractor={(item) => item.idMeal}
-                />
+        <>
+            {loading &&
+                <SafeAreaView style={styles.loader}>
+                    <ActivityIndicator size="extra-large" />
+                    <Text style={{ ...styles.titleText, fontSize: 16 }}>Loading...</Text>
+                </SafeAreaView>
             }
 
-            {emptyMeals &&
-                <TouchableOpacity style={styles.titleContainer} activeOpacity={0.7} onPress={() => handleRandomMeal()}>
-                    <Text style={{ ...styles.titleText, fontSize: 16 }}>
-                        There are no meals with this ingredient.
-                    </Text>
-                    <Text style={{ ...styles.titleText, fontSize: 16 }}>
-                        Click here for a random meal instead.
-                    </Text>
-                </TouchableOpacity>
+            {!loading &&
+                <SafeAreaView style={styles.container}>
+                    <StatusBar />
+
+                    {searchMeals != '' &&
+                        <SectionList
+                            sections={[
+                                {
+                                    title: 'Header',
+                                    data: searchMeals,
+                                },
+                            ]}
+                            renderItem={renderItem}
+                            renderSectionHeader={renderSectionHeader}
+                            renderSectionFooter={renderSectionFooter}
+                            keyExtractor={(item) => item.idMeal}
+                        />
+                    }
+
+                    {emptyMeals &&
+                        <TouchableOpacity style={styles.titleContainer} activeOpacity={0.7} onPress={() => handleRandomMeal()}>
+                            <Text style={{ ...styles.titleText, fontSize: 16 }}>
+                                There are no meals with this ingredient.
+                            </Text>
+                            <Text style={{ ...styles.titleText, fontSize: 16 }}>
+                                Click here for a random meal instead.
+                            </Text>
+                        </TouchableOpacity>
+                    }
+
+                </SafeAreaView>
             }
 
-        </SafeAreaView>
+        </>
+
     )
 }
 
@@ -118,4 +134,8 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         textAlign: 'center',
     },
+    loader: {
+        justifyContent: 'center',
+        flex: 1
+    }
 });

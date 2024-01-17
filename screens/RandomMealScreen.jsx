@@ -1,9 +1,10 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
-import { SafeAreaView, SectionList, Image, StyleSheet, Text, View, TouchableOpacity, StatusBar, Linking } from 'react-native';
+import { SafeAreaView, SectionList, Image, StyleSheet, Text, View, TouchableOpacity, StatusBar, Linking, ActivityIndicator } from 'react-native';
 
 export default function RandomMealScreen() {
     const [randomMeal, setRandomMeal] = useState([])
+    const [loading, setLoading] = useState(true);
 
 
     useEffect(() => {
@@ -12,6 +13,7 @@ export default function RandomMealScreen() {
                 const response = await axios.get(`https://www.themealdb.com/api/json/v1/1/random.php`);
                 const randomMealData = response.data.meals;
                 setRandomMeal(randomMealData);
+                setLoading(false)
             } catch (error) {
                 console.log("API error", error)
             }
@@ -44,22 +46,35 @@ export default function RandomMealScreen() {
         </View>
     );
     return (
-        <SafeAreaView style={styles.container}>
-            <StatusBar />
 
-            <SectionList
-                sections={[
-                    {
-                        title: 'Header',
-                        data: randomMeal,
-                    },
-                ]}
-                renderItem={renderItem}
-                renderSectionHeader={renderSectionHeader}
-                keyExtractor={(item) => item.idMeal}
-            />
+        <>
+            {loading &&
+                <SafeAreaView style={styles.loader}>
+                    <ActivityIndicator size="extra-large" />
+                    <Text style={{ ...styles.titleText, fontSize: 16 }}>Loading...</Text>
+                </SafeAreaView>
+            }
 
-        </SafeAreaView>
+            {!loading &&
+                <SafeAreaView style={styles.container}>
+                    <StatusBar />
+
+                    <SectionList
+                        sections={[
+                            {
+                                title: 'Header',
+                                data: randomMeal,
+                            },
+                        ]}
+                        renderItem={renderItem}
+                        renderSectionHeader={renderSectionHeader}
+                        keyExtractor={(item) => item.idMeal}
+                    />
+
+                </SafeAreaView>
+            }
+        </>
+
     );
 }
 
@@ -101,6 +116,10 @@ const styles = StyleSheet.create({
         paddingHorizontal: 30,
         color: 'white',
         borderRadius: 5,
+    },
+    loader: {
+        justifyContent: 'center',
+        flex: 1
     }
 });
 

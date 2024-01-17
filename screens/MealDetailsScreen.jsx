@@ -1,9 +1,10 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
-import { SafeAreaView, SectionList, Image, StyleSheet, Text, View, TouchableOpacity, StatusBar, Linking } from 'react-native';
+import { SafeAreaView, SectionList, Image, StyleSheet, Text, View, TouchableOpacity, StatusBar, Linking, ActivityIndicator } from 'react-native';
 
 export default function MealDetailsScreen({ route }) {
     const [mealDetails, setMealDetails] = useState([])
+    const [loading, setLoading] = useState(true);
 
     const idMeal = route.params.idMeal
 
@@ -13,6 +14,7 @@ export default function MealDetailsScreen({ route }) {
                 const response = await axios.get(`https://www.themealdb.com/api/json/v1/1/lookup.php?i=${idMeal}`);
                 const idMealsData = response.data.meals;
                 setMealDetails(idMealsData);
+                setLoading(false)
             } catch (error) {
                 console.log("API error", error)
             }
@@ -45,22 +47,34 @@ export default function MealDetailsScreen({ route }) {
         </View>
     );
     return (
-        <SafeAreaView style={styles.container}>
-            <StatusBar />
+        <>
+            {loading &&
+                <SafeAreaView style={styles.loader}>
+                    <ActivityIndicator size="extra-large" />
+                    <Text style={{ ...styles.titleText, fontSize: 16 }}>Loading...</Text>
+                </SafeAreaView>
+            }
 
-            <SectionList
-                sections={[
-                    {
-                        title: 'Header',
-                        data: mealDetails,
-                    },
-                ]}
-                renderItem={renderItem}
-                renderSectionHeader={renderSectionHeader}
-                keyExtractor={(item) => item.idMeal}
-            />
+            {!loading &&
+                <SafeAreaView style={styles.container}>
+                    <StatusBar />
 
-        </SafeAreaView>
+                    <SectionList
+                        sections={[
+                            {
+                                title: 'Header',
+                                data: mealDetails,
+                            },
+                        ]}
+                        renderItem={renderItem}
+                        renderSectionHeader={renderSectionHeader}
+                        keyExtractor={(item) => item.idMeal}
+                    />
+
+                </SafeAreaView>
+            }
+        </>
+
     );
 }
 
@@ -102,5 +116,9 @@ const styles = StyleSheet.create({
         paddingHorizontal: 30,
         color: 'white',
         borderRadius: 5,
+    },
+    loader: {
+        justifyContent: 'center',
+        flex: 1
     }
 });
