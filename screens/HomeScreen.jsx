@@ -1,10 +1,11 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
-import { SafeAreaView, SectionList, Image, StyleSheet, Text, View, TouchableOpacity, StatusBar, TextInput } from 'react-native';
+import { SafeAreaView, SectionList, Image, StyleSheet, Text, View, TouchableOpacity, StatusBar, TextInput, ActivityIndicator } from 'react-native';
 
 export default HomeScreen = ({ navigation }) => {
     const [categories, setCategories] = useState([]);
     const [textInput, setTextInput] = useState("");
+    const [loading, setLoading] = useState(true);
 
     const handleMealsScreen = (category) => {
         navigation.navigate('Meals', { category });
@@ -28,6 +29,7 @@ export default HomeScreen = ({ navigation }) => {
                 const response = await axios.get('https://www.themealdb.com/api/json/v1/1/categories.php');
                 const categoriesData = response.data.categories;
                 setCategories(categoriesData);
+                setLoading(false);
             } catch (error) {
                 console.log('API error', error);
             }
@@ -66,23 +68,35 @@ export default HomeScreen = ({ navigation }) => {
     );
 
     return (
-        <SafeAreaView style={styles.container}>
-            <StatusBar />
 
-            <SectionList
-                sections={[
-                    {
-                        title: 'Header',
-                        data: categories,
-                    },
-                ]}
-                renderItem={renderItem}
-                renderSectionHeader={renderSectionHeader}
-                renderSectionFooter={renderSectionFooter}
-                keyExtractor={(item) => item.idCategory}
-            />
+        <>
+            {loading &&
+                <SafeAreaView style={styles.loader}>
+                    <ActivityIndicator size="extra-large" />
+                    <Text style={{ ...styles.titleText, fontSize: 16 }}>Loading...</Text>
+                </SafeAreaView>
+            }
 
-        </SafeAreaView>
+            {!loading &&
+                <SafeAreaView style={styles.container}>
+                    <StatusBar />
+
+                    <SectionList
+                        sections={[
+                            {
+                                title: 'Header',
+                                data: categories,
+                            },
+                        ]}
+                        renderItem={renderItem}
+                        renderSectionHeader={renderSectionHeader}
+                        renderSectionFooter={renderSectionFooter}
+                        keyExtractor={(item) => item.idCategory}
+                    />
+
+                </SafeAreaView>
+            }
+        </>
     );
 };
 
@@ -118,4 +132,8 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         textAlign: 'center',
     },
+    loader: {
+        justifyContent: 'center',
+        flex: 1
+    }
 });
